@@ -1,6 +1,6 @@
 const inputData = Deno.readTextFileSync("./input-data.txt").split("\n");
 
-const tailLocations = new Set<string>(['0:0']);
+const tailLocations = new Set<string>(["0:0"]);
 
 const neighbors = [
   [0, 1],
@@ -24,7 +24,6 @@ interface Point {
   x: number;
   y: number;
 }
-
 
 const rope: Point[] = Array.from({ length: 10 }, () => ({ y: 0, x: 0 }));
 

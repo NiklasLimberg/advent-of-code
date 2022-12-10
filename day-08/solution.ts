@@ -21,7 +21,7 @@ const testing = false;
 let maxRow = 0;
 let maxColumn = 0;
 
-(testing ? exampleInput: input.split("\n")).forEach((line, row) => {
+(testing ? exampleInput : input.split("\n")).forEach((line, row) => {
   const characters = line.split("");
   characters.forEach((character, column) => {
     treeMap.set(`row:${row}, column:${column}`, {
@@ -109,36 +109,35 @@ treeMap.forEach((tree) => {
   }
 });
 
-
 function calculateScenicScore(row: number, column: number) {
   const baseTree = getTree({ row, column });
-  
+
   let leftScenicScore = 0;
   for (let leftColumn = column - 1; leftColumn >= 0; leftColumn--) {
     const leftTree = getTree({ row, column: leftColumn });
     leftScenicScore += 1;
-    
-    if(baseTree.height <= leftTree.height) {
+
+    if (baseTree.height <= leftTree.height) {
       break;
-    } 
+    }
   }
 
   let rightScenicScore = 0;
   for (let rightColumn = column + 1; rightColumn <= maxColumn; rightColumn++) {
     const right = getTree({ row, column: rightColumn });
     rightScenicScore += 1;
-    
-    if(baseTree.height<=right.height) {
+
+    if (baseTree.height <= right.height) {
       break;
-    } 
+    }
   }
-  
+
   let topScenicScore = 0;
   for (let topRow = row - 1; topRow >= 0; topRow--) {
     const topTree = getTree({ row: topRow, column });
     topScenicScore += 1;
-    
-    if(baseTree.height <= topTree.height) {
+
+    if (baseTree.height <= topTree.height) {
       break;
     }
   }
@@ -147,15 +146,15 @@ function calculateScenicScore(row: number, column: number) {
   for (let bottomRow = row + 1; bottomRow <= maxRow; bottomRow++) {
     const bottomTree = getTree({ row: bottomRow, column });
     bottomScenicScore += 1;
-    
-    if(baseTree.height <= bottomTree.height) {
+
+    if (baseTree.height <= bottomTree.height) {
       break;
-    } 
+    }
   }
 
-  baseTree.scenicScore = leftScenicScore * rightScenicScore * topScenicScore * bottomScenicScore;
+  baseTree.scenicScore = leftScenicScore * rightScenicScore * topScenicScore *
+    bottomScenicScore;
 }
-
 
 for (let row = 0; row <= maxRow; row++) {
   for (let column = 0; column <= maxColumn; column++) {
@@ -163,7 +162,9 @@ for (let row = 0; row <= maxRow; row++) {
   }
 }
 
-const maxScenicScore = Math.max(...Array.from(treeMap.values()).map(tree => tree.scenicScore));
+const maxScenicScore = Math.max(
+  ...Array.from(treeMap.values()).map((tree) => tree.scenicScore),
+);
 
 console.log({ numberOfVisibleTrees });
-console.log({maxScenicScore});
+console.log({ maxScenicScore });
