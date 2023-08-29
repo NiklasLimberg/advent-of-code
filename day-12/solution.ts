@@ -1,12 +1,8 @@
 const neighborLocations = [
   [0, 1],
-  [0, -1],
   [1, 0],
+  [0, -1],
   [-1, 0],
-  [1, 1],
-  [1, -1],
-  [-1, 1],
-  [-1, -1],
 ] as const;
 
 const nodeMap = new Map<string, Node>();
@@ -36,11 +32,9 @@ class Node {
         return;
       }
 
-      const isValidNeighbor = neighborNode.height - this.height <= 1;
+      const isValidNeighbor = neighborNode.height <= this.height + 1;
 
       if (isValidNeighbor) {
-          if(this.height < neighborNode.height) {console.log(this.height, neighborNode.height);}
-          
         neighbors.push(neighborNode);
       }
     });
@@ -68,7 +62,6 @@ function breathFirstSearch(start: Node) {
         visited.add(neighbor.location);
 
         if (neighbor.location === end) {
-            console.log("found end", current.steps);
           shortestPath = Math.min(shortestPath, current.steps);
         }
       });
@@ -80,7 +73,7 @@ function breathFirstSearch(start: Node) {
 let start = "";
 let end = "";
 
-Deno.readTextFileSync("test.txt").split("\n").forEach((line, row) => {
+Deno.readTextFileSync("input.txt").split("\n").forEach((line, row) => {
   line.split("").forEach((char, column) => {
     const location = `${row}:${column}`;
     let height = -1;
@@ -92,17 +85,27 @@ Deno.readTextFileSync("test.txt").split("\n").forEach((line, row) => {
     }
     if (char == "E") {
       console.log("end", location);
-      height = 27;
+      height = 25;
       end = location;
     }
 
     if (height === -1) {
-      height = char.charCodeAt(0) - 96;
+      height = char.charCodeAt(0) - "a".codePointAt(0)!;
     }
 
     nodeMap.set(location, new Node(row, column, height));
   });
 });
 
-console.log();
+console.log("Day 12 Part 1");
 console.log(breathFirstSearch(nodeMap.get(start)!));
+
+console.log("Day 12 Part 2");
+console.log(Math.min(
+  ...Array.from(nodeMap.values()).map((node) => {
+    if (node.height === 0) {
+      return breathFirstSearch(node);
+    }
+    return Infinity;
+  }),
+));
